@@ -8,7 +8,7 @@ const quizData = [
             "Tôn giả Ưu-đa-la",
             "Tôn giả Xá-lợi-phất"
         ],
-        correctAnswer: 0
+        correctAnswer: 2
     },
     {
         question: "Câu 2: Lời cảnh báo của Tôn giả A-nan đối với người xem thường Khế kinh Tăng Nhất A-hàm là gì?",
@@ -18,7 +18,7 @@ const quizData = [
             "Mất hết phước báu trong hiện tại.",
             "Đời đời sinh ra bần cùng, ngu si."
         ],
-        correctAnswer: 0
+        correctAnswer: 1
     },
     {
         question: "Câu 3: Theo Tôn giả A-nan, Tăng Nhất A-hàm có vị thế như thế nào đối với các pháp?",
@@ -138,7 +138,7 @@ const quizData = [
             "Phải kết tập kinh điển.",
             "Phải truyền bá pháp môn niệm Phật."
         ],
-        correctAnswer: 2
+        correctAnswer: 0
     },
     {
         question: "Câu 15: Đối với phàm phu khó quán sát tâm ý (Kinh Tâm Nhanh Nhạy), Đức Phật dạy giải pháp thực tiễn là gì?",
@@ -168,7 +168,7 @@ const quizData = [
             "Ôm tâm sân hận.",
             "Tiếc nuối người thân."
         ],
-        correctAnswer: 1
+        correctAnswer: 2
     },
     {
         question: "Câu 18: Ngược lại, điều kiện để được sanh lên cõi trời ngay tức khắc lúc qua đời (Kinh Sanh Thiên) là gì?",
@@ -288,7 +288,7 @@ const quizData = [
             "Niệm, trạch pháp, tinh tấn, hỷ, khinh an, định, xả.",
             "Chánh kiến, chánh tư duy, chánh ngữ, chánh nghiệp, chánh mạng, chánh tinh tấn, chánh niệm, chánh định."
         ],
-        correctAnswer: 0
+        correctAnswer: 2
     },
     {
         question: "Câu 30: Đức Phật dạy cách diệt trừ tâm ganh ghét và đố kỵ bằng pháp nào?",
@@ -378,7 +378,7 @@ const quizData = [
             "Từ bi lực và Trí tuệ lực.",
             "Nhẫn lực và Tư duy lực."
         ],
-        correctAnswer: 1
+        correctAnswer: 3
     },
     {
         question: "Câu 39: Quả báo làm người của việc KHÔNG sát sanh là gì?",
@@ -438,7 +438,7 @@ const quizData = [
             "Nan-đà Mẫu.",
             "Ưu-bát Hoa Sắc."
         ],
-        correctAnswer: 0
+        correctAnswer: 2
     },
     {
         question: "Câu 45: Pháp hộ tâm (Kinh Không buông lung) đòi hỏi hành giả phải khéo trừ diệt những lậu hoặc nào đã sanh?",
