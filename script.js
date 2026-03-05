@@ -1,4 +1,3 @@
-// Quiz Data
 const quizData = [
     {
         question: "Câu 1: Trong phẩm Tựa, Tôn giả A-nan đã phó chúc Khế kinh Tăng Nhất A-hàm cho vị Tôn giả nào?",
@@ -598,7 +597,7 @@ function showResultMessage(isCorrect) {
         resultMessage.textContent = '✅ Chính xác!';
         resultMessage.className = 'result-message correct';
     } else {
-        resultMessage.textContent = '❌ Sai rồi!';
+        resultMessage.textContent = '❌ Sai!';
         resultMessage.className = 'result-message incorrect';
     }
 }
