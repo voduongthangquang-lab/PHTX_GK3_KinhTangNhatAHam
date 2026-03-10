@@ -8,7 +8,7 @@ const quizData = [
             "Tôn giả Xá-lợi-phất"
         ],
         correctAnswer: 2,
-        explanation: "Trong văn bản phẩm Tựa, người được phó chúc là Tôn giả Ưu-đa-la. Hậu quả của việc xem thường kinh được xác định cụ thể là "đọa lạc xuống hàng phàm phu" (mất đi cơ hội giải thoát), chứ không nói chung chung là đọa địa ngục hay mất phước."
+        explanation: "Trong văn bản phẩm Tựa, người được phó chúc là Tôn giả Ưu-đa-la. Hậu quả của việc xem thường kinh được xác định cụ thể là đọa lạc xuống hàng phàm phu (mất đi cơ hội giải thoát), chứ không nói chung chung là đọa địa ngục hay mất phước."
     },
     {
         question: "Câu 2: Lời cảnh báo của Tôn giả A-nan đối với người xem thường Khế kinh Tăng Nhất A-hàm là gì?",
