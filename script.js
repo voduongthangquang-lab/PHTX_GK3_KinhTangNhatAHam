@@ -602,7 +602,6 @@ function showResultMessage(isCorrect) {
         resultMessage.className = 'result-message incorrect';
     }
 }
-
 // Show Correct Answer
 function showCorrectAnswer() {
     const question = quizData[currentQuestion];
@@ -610,9 +609,20 @@ function showCorrectAnswer() {
     const correctAnswerLetter = String.fromCharCode(65 + question.correctAnswer);
     const correctAnswerText = question.options[question.correctAnswer];
 
-    correctAnswerDisplay.innerHTML = `
+    let displayHTML = `
         <strong>Đáp án đúng:</strong> <strong>${correctAnswerLetter}. ${correctAnswerText}</strong>
     `;
+
+    // Nếu câu hỏi có trường 'explanation'
+    if (question.explanation) {
+        displayHTML += `
+            <div class="explanation-box" style="margin-top: 10px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #17a2b8; border-radius: 4px;">
+                <strong>Giải thích:</strong> ${question.explanation}
+            </div>
+        `;
+    }
+
+    correctAnswerDisplay.innerHTML = displayHTML;
 }
 
 // Update Progress Bar
@@ -713,7 +723,8 @@ function displayAnswerReview(correctCount) {
             <div class="review-question">${idx + 1}. ${question.question}</div>
             <div class="review-answer">
                 <strong>Trả lời của bạn:</strong> ${questionLetter}. ${userAnswerText}<br>
-                ${isCorrect ? '<strong style="color: var(--success-color);">✅ Đúng!</strong>' : `<strong style="color: var(--error-color);">❌ Sai!</strong><br><strong>Đáp án đúng:</strong> ${correctAnswerLetter}. ${correctAnswerText}`}
+                ${isCorrect ? '<strong style="color: var(--success-color);">✅ Đúng!</strong>' : `<strong style="color: var(--error-color);
+                ">❌ Sai!</strong><br><strong>Đáp án đúng:</strong> ${correctAnswerLetter}. ${correctAnswerText}`}
             </div>
         `;
 
