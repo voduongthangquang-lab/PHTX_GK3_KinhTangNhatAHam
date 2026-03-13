@@ -97,7 +97,7 @@ const quizData = [
             "Là những vị đã dứt sạch nhân duyên sinh tử, hiện thân Phật."
         ],
         correctAnswer: 3,
-        explanation:"Đối tượng "Tăng" mà hành giả hướng tâm đến có đặc điểm: thành tựu giới, định, tuệ, giải thoát và giải thoát tri kiến; gồm bốn đôi tám bậc; là ruộng phước của thế gian.",
+        explanation:"Đối tượng \"Tăng\" mà hành giả hướng tâm đến có đặc điểm: thành tựu giới, định, tuệ, giải thoát và giải thoát tri kiến; gồm bốn đôi tám bậc; là ruộng phước của thế gian.",
 
     },
     {
@@ -528,9 +528,7 @@ const quizData = [
             "Trộm cướp."
         ],
         correctAnswer: 2,
-        explanation:[
-        "Tà dâm đưa đến đọa lạc, làm người thì bị khinh chê, sống trong môi trường dâm loạn",
-        "không tà dâm đem lại phước báo, đời sống thanh tịnh và hướng đến giải thoát. "],
+        explanation: "Tà dâm đưa đến đọa lạc, làm người thì bị khinh chê, sống trong môi trường dâm loạn.<br>Không tà dâm đem lại phước báo, đời sống thanh tịnh và hướng đến giải thoát.",
     },
     {
         question: "Câu 49: Nền tảng đem lại tiếng tốt, phước báo và làm cơ sở chứng Niết-bàn xuất phát từ việc giữ gìn giới nào?",
@@ -541,9 +539,7 @@ const quizData = [
             "Không uống rượu."
         ],
         correctAnswer: 2,
-        explanation:[
-        "Nói dối đưa đến ác đạo, làm người bị chán ghét;",
-        "không nói dối đem lại tiếng tốt, phước báo và là nền tảng để chứng Niết-bàn."],
+       explanation: "Nói dối đưa đến ác đạo, làm người bị chán ghét;<br>Không nói dối đem lại tiếng tốt, phước báo và là nền tảng để chứng Niết-bàn.",
     },
     {
         question: "Câu 50: Tác hại nguy hiểm nhất về mặt TÂM LINH của việc uống rượu đối với lộ trình giác ngộ là gì?",
@@ -555,9 +551,7 @@ const quizData = [
     
         ],
         correctAnswer: 3,
-        explanation:[
-        "Uống rượu khiến đọa lạc, làm người thì ngu si, mất chánh niệm, Rượu là nhân của Si mê (Vô minh);",
-        "không uống rượu giúp trí tuệ sáng suốt, phước báo tăng trưởng và hướng đến Niết-bàn. "],
+       explanation: "Uống rượu khiến đọa lạc, làm người thì ngu si, mất chánh niệm. Rượu là nhân của Si mê (Vô minh);<br>Không uống rượu giúp trí tuệ sáng suốt, phước báo tăng trưởng và hướng đến Niết-bàn.",
     },
     {
         question: "Câu 51: Nữ cư sĩ nào được nhắc đến như là biểu tượng của đệ nhất thiền định tại gia (gương sáng trong Kinh Ưu-bà-di Dạy Con Gái)?",
