@@ -617,90 +617,136 @@ const quizData = [
     },
 ];
 
-// Quiz State
-let currentQuestion = 0;
 let userAnswers = [];
-let answered = false;
+let answeredQuestions = [];
 
 function initQuiz() {
-    document.getElementById('totalQuestions').textContent = quizData.length;
-    showQuestion(0);
+    const totalQuestionsEl = document.getElementById('totalQuestions');
+    if (totalQuestionsEl) {
+        totalQuestionsEl.textContent = quizData.length;
+    }
+    
+    // Khởi tạo trạng thái trả lời (để trống ban đầu)
+    userAnswers = new Array(quizData.length).fill(null);
+    answeredQuestions = new Array(quizData.length).fill(false);
+
+    // Ẩn thanh tiến trình (progress bar) và các nút điều hướng (Next, Prev)
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) progressBar.parentElement.style.display = 'none';
+    
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+
+    // Hiển thị toàn bộ câu hỏi ra màn hình
+    renderAllQuestions();
+    
+    // Chỉ hiển thị nút Nộp Bài (Finish) ở cuối trang
+    const finishBtn = document.getElementById('finishBtn');
+    if (finishBtn) finishBtn.style.display = 'block';
 }
 
-// Show Question
-function showQuestion(index) {
-    const question = quizData[index];
-    const questionText = document.getElementById('questionText');
-    const optionsContainer = document.getElementById('optionsContainer');
-    const resultSection = document.getElementById('resultSection');
+function renderAllQuestions() {
+    const quizContainer = document.querySelector('.quiz-container');
     const buttonGroup = document.querySelector('.button-group');
 
-    // Reset
-    answered = false;
-    questionText.textContent = question.question;
-    optionsContainer.innerHTML = '';
-    resultSection.style.display = 'none';
-    buttonGroup.style.display = 'flex';
+    // Ẩn các phần tử HTML phục vụ cho việc hiển thị 1 câu hỏi/lần của giao diện cũ
+    const oldQuestionText = document.getElementById('questionText');
+    const oldOptionsContainer = document.getElementById('optionsContainer');
+    const oldResultSection = document.getElementById('resultSection');
+    
+    if (oldQuestionText) oldQuestionText.style.display = 'none';
+    if (oldOptionsContainer) oldOptionsContainer.style.display = 'none';
+    if (oldResultSection) oldResultSection.style.display = 'none';
 
-    // Generate options
-    question.options.forEach((option, idx) => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        optionDiv.innerHTML = `
-            <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
-            <span>${option}</span>
+    // Tạo một khung chứa (container) mới cho toàn bộ danh sách câu hỏi
+    let allQuestionsContainer = document.getElementById('all-questions-container');
+    if (!allQuestionsContainer) {
+        allQuestionsContainer = document.createElement('div');
+        allQuestionsContainer.id = 'all-questions-container';
+        // Chèn danh sách câu hỏi vào trước cụm nút bấm
+        quizContainer.insertBefore(allQuestionsContainer, buttonGroup);
+    } else {
+        allQuestionsContainer.innerHTML = ''; // Làm sạch khi nhấn "Làm lại"
+    }
+
+    let questionsHTML = '';
+    // Vòng lặp duyệt qua tất cả các câu hỏi để tạo HTML
+    quizData.forEach((question, qIndex) => {
+        questionsHTML += `
+            <div class="question-block" id="question-block-${qIndex}" style="margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px dashed #ddd;">
+                <div class="question-text" style="color: var(--primary-color); font-size: 1.2em; margin-bottom: 20px; font-weight: bold;">
+                    ${question.question}
+                </div>
+                <div class="options-container" id="options-${qIndex}" style="display: flex; flex-direction: column; gap: 12px;">
         `;
-        optionDiv.onclick = () => selectAnswer(idx);
-        optionsContainer.appendChild(optionDiv);
+        
+        question.options.forEach((option, oIndex) => {
+            questionsHTML += `
+                    <div class="option" id="option-${qIndex}-${oIndex}" onclick="selectAnswer(${qIndex}, ${oIndex})">
+                        <span class="option-letter">${String.fromCharCode(65 + oIndex)}</span>
+                        <span>${option}</span>
+                    </div>
+            `;
+        });
+
+        questionsHTML += `
+                </div>
+                <div class="result-section" id="result-${qIndex}" style="display: none; margin-top: 20px; padding: 15px; border-radius: 8px;">
+                    <div id="result-message-${qIndex}" class="result-message" style="font-weight: bold; margin-bottom: 10px;"></div>
+                    <div id="correct-answer-${qIndex}" class="correct-answer" style="background-color: #e8f4f8; border-left: 4px solid var(--primary-color); padding: 15px; border-radius: 5px;"></div>
+                </div>
+            </div>
+        `;
     });
 
-    updateProgress();
-    updateButtons();
-
-    window.scrollTo(0, 0);
+    allQuestionsContainer.innerHTML = questionsHTML;
 }
 
-function selectAnswer(index) {
-    if (answered) return;
+function selectAnswer(qIndex, oIndex) {
+    if (answeredQuestions[qIndex]) return; // Nếu câu hỏi đã được chọn đáp án thì bỏ qua
 
-    answered = true;
-    userAnswers[currentQuestion] = index;
+    answeredQuestions[qIndex] = true;
+    userAnswers[qIndex] = oIndex; // Lưu lại đáp án người dùng chọn
 
-    const options = document.querySelectorAll('.option');
-    const correctAnswer = quizData[currentQuestion].correctAnswer;
+    const correctAnswer = quizData[qIndex].correctAnswer;
+    const optionsContainer = document.getElementById(`options-${qIndex}`);
+    const options = optionsContainer.querySelectorAll('.option');
 
+    // Đổi màu đáp án
     options.forEach((option, idx) => {
         option.classList.add('disabled');
         if (idx === correctAnswer) {
             option.classList.add('correct');
         }
-        if (idx === index && idx !== correctAnswer) {
+        if (idx === oIndex && idx !== correctAnswer) {
             option.classList.add('incorrect');
         }
     });
 
-    showResultMessage(index === correctAnswer);
-    showCorrectAnswer();
-    updateButtons();
+    showResultForQuestion(qIndex, oIndex === correctAnswer);
 }
 
-function showResultMessage(isCorrect) {
-    const resultSection = document.getElementById('resultSection');
-    const resultMessage = document.getElementById('resultMessage');
+function showResultForQuestion(qIndex, isCorrect) {
+    const resultSection = document.getElementById(`result-${qIndex}`);
+    const resultMessage = document.getElementById(`result-message-${qIndex}`);
+    const correctAnswerDisplay = document.getElementById(`correct-answer-${qIndex}`);
+    const question = quizData[qIndex];
 
     resultSection.style.display = 'block';
 
+    // Hiển thị thông báo đúng/sai ngay bên dưới câu hỏi
     if (isCorrect) {
         resultMessage.textContent = '✅ Chính xác!';
-        resultMessage.className = 'result-message correct';
+        resultSection.style.backgroundColor = '#d5f4e6';
+        resultMessage.style.color = 'var(--success-color)';
     } else {
-        resultMessage.textContent = '❌ Huhu, sai rồi !';
-        resultMessage.className = 'result-message incorrect';
+        resultMessage.textContent = '❌ Sai rồi!';
+        resultSection.style.backgroundColor = '#fadbd8';
+        resultMessage.style.color = 'var(--error-color)';
     }
-}
-function showCorrectAnswer() {
-    const question = quizData[currentQuestion];
-    const correctAnswerDisplay = document.getElementById('correctAnswerDisplay');
+
     const correctAnswerLetter = String.fromCharCode(65 + question.correctAnswer);
     const correctAnswerText = question.options[question.correctAnswer];
 
@@ -708,10 +754,10 @@ function showCorrectAnswer() {
         <strong>Đáp án đúng:</strong> <strong>${correctAnswerLetter}. ${correctAnswerText}</strong>
     `;
 
-    // Nếu câu hỏi có trường 'explanation'
+    // Nếu có giải thích thì hiển thị thêm khung giải thích
     if (question.explanation) {
         displayHTML += `
-            <div class="explanation-box" style="margin-top: 10px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #17a2b8; border-radius: 4px;">
+            <div class="explanation-box" style="margin-top: 15px; padding: 10px; background-color: white; border-left: 4px solid var(--warning-color); border-radius: 4px;">
                 <strong>Giải thích:</strong> ${question.explanation}
             </div>
         `;
@@ -720,54 +766,6 @@ function showCorrectAnswer() {
     correctAnswerDisplay.innerHTML = displayHTML;
 }
 
-// Update Progress Bar
-function updateProgress() {
-    const progress = ((currentQuestion + 1) / quizData.length) * 100;
-    document.getElementById('progressBar').style.width = progress + '%';
-    document.getElementById('currentQuestion').textContent = currentQuestion + 1;
-}
-
-// Update Buttons
-function updateButtons() {
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const finishBtn = document.getElementById('finishBtn');
-
-    // Show/hide prev button
-    prevBtn.style.display = currentQuestion > 0 ? 'block' : 'none';
-
-    // Show/hide next and finish buttons
-    if (answered) {
-        if (currentQuestion < quizData.length - 1) {
-            nextBtn.style.display = 'block';
-            finishBtn.style.display = 'none';
-        } else {
-            nextBtn.style.display = 'none';
-            finishBtn.style.display = 'block';
-        }
-    } else {
-        nextBtn.style.display = 'none';
-        finishBtn.style.display = 'none';
-    }
-}
-
-// Next Question
-function nextQuestion() {
-    if (currentQuestion < quizData.length - 1) {
-        currentQuestion++;
-        showQuestion(currentQuestion);
-    }
-}
-
-// Previous Question
-function previousQuestion() {
-    if (currentQuestion > 0) {
-        currentQuestion--;
-        showQuestion(currentQuestion);
-    }
-}
-
-// Finish Quiz
 function finishQuiz() {
     const quizContainer = document.querySelector('.quiz-container');
     const finalScore = document.getElementById('finalScore');
@@ -789,15 +787,20 @@ function calculateScore() {
 
     const percentage = Math.round((correctCount / quizData.length) * 100);
 
-    document.getElementById('correctCount').textContent = correctCount;
-    document.getElementById('totalCount').textContent = quizData.length;
-    document.getElementById('scorePercentage').textContent = percentage + '%';
+    const correctCountEl = document.getElementById('correctCount');
+    const totalCountEl = document.getElementById('totalCount');
+    const scorePercentageEl = document.getElementById('scorePercentage');
+
+    if(correctCountEl) correctCountEl.textContent = correctCount;
+    if(totalCountEl) totalCountEl.textContent = quizData.length;
+    if(scorePercentageEl) scorePercentageEl.textContent = percentage + '%';
 
     displayAnswerReview(correctCount);
 }
 
 function displayAnswerReview(correctCount) {
     const answerReview = document.getElementById('answerReview');
+    if(!answerReview) return;
     answerReview.innerHTML = '';
 
     quizData.forEach((question, idx) => {
@@ -807,15 +810,22 @@ function displayAnswerReview(correctCount) {
         const reviewItem = document.createElement('div');
         reviewItem.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
 
-        const questionLetter = String.fromCharCode(65 + userAnswer);
-        const userAnswerText = question.options[userAnswer];
         const correctAnswerLetter = String.fromCharCode(65 + question.correctAnswer);
         const correctAnswerText = question.options[question.correctAnswer];
+
+        let userAnswerHTML = '';
+        if (userAnswer !== null && userAnswer !== undefined) {
+            const questionLetter = String.fromCharCode(65 + userAnswer);
+            const userAnswerText = question.options[userAnswer];
+            userAnswerHTML = `<strong>Trả lời của bạn:</strong> ${questionLetter}. ${userAnswerText}<br>`;
+        } else {
+             userAnswerHTML = `<strong>Trả lời của bạn:</strong> <span style="color: #999;">Chưa trả lời</span><br>`;
+        }
 
         reviewItem.innerHTML = `
             <div class="review-question">${idx + 1}. ${question.question}</div>
             <div class="review-answer">
-                <strong>Trả lời của bạn:</strong> ${questionLetter}. ${userAnswerText}<br>
+                ${userAnswerHTML}
                 ${isCorrect ? '<strong style="color: var(--success-color);">✅ Đúng!</strong>' : `<strong style="color: var(--error-color);">❌ Sai!</strong><br><strong>Đáp án đúng:</strong> ${correctAnswerLetter}. ${correctAnswerText}`}
             </div>
         `;
@@ -824,23 +834,34 @@ function displayAnswerReview(correctCount) {
     });
 }
 
-// Restart Quiz
 function restartQuiz() {
-    currentQuestion = 0;
-    userAnswers = [];
-    answered = false;
-
     document.querySelector('.quiz-container').style.display = 'block';
-    document.getElementById('finalScore').style.display = 'none';
+    const finalScore = document.getElementById('finalScore');
+    if(finalScore) finalScore.style.display = 'none';
 
-    showQuestion(0);
+    initQuiz();
+    window.scrollTo(0, 0);
 }
 
-// Event Listeners
-document.getElementById('nextBtn').addEventListener('click', nextQuestion);
-document.getElementById('prevBtn').addEventListener('click', previousQuestion);
-document.getElementById('finishBtn').addEventListener('click', finishQuiz);
-document.getElementById('restartBtn').addEventListener('click', restartQuiz);
+// Gỡ bỏ các event listener cũ từ file HTML và thiết lập lại các nút bấm
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const finishBtn = document.getElementById('finishBtn');
+const restartBtn = document.getElementById('restartBtn');
 
-// Initialize Quiz on Load
-window.addEventListener('load', initQuiz);
+if(nextBtn) nextBtn.replaceWith(nextBtn.cloneNode(true));
+if(prevBtn) prevBtn.replaceWith(prevBtn.cloneNode(true));
+
+if(finishBtn) {
+    const newFinishBtn = finishBtn.cloneNode(true);
+    finishBtn.replaceWith(newFinishBtn);
+    newFinishBtn.addEventListener('click', finishQuiz);
+}
+if(restartBtn) {
+    const newRestartBtn = restartBtn.cloneNode(true);
+    restartBtn.replaceWith(newRestartBtn);
+    newRestartBtn.addEventListener('click', restartQuiz);
+}
+
+// Khởi chạy Quiz khi web tải xong
+window.onload = initQuiz;
