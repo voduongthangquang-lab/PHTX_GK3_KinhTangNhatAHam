@@ -626,11 +626,9 @@ function initQuiz() {
         totalQuestionsEl.textContent = quizData.length;
     }
     
-    // Khởi tạo trạng thái trả lời (để trống ban đầu)
     userAnswers = new Array(quizData.length).fill(null);
     answeredQuestions = new Array(quizData.length).fill(false);
 
-    // Ẩn thanh tiến trình (progress bar) và các nút điều hướng (Next, Prev)
     const progressBar = document.querySelector('.progress-bar');
     if (progressBar) progressBar.parentElement.style.display = 'none';
     
@@ -843,7 +841,6 @@ function restartQuiz() {
     window.scrollTo(0, 0);
 }
 
-// Gỡ bỏ các event listener cũ từ file HTML và thiết lập lại các nút bấm
 const nextBtn = document.getElementById('nextBtn');
 const prevBtn = document.getElementById('prevBtn');
 const finishBtn = document.getElementById('finishBtn');
